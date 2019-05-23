@@ -8,7 +8,7 @@ export default function isSolvable(tiles) {
 
 function findXPosition(tiles) {
   const blankTile = tiles.filter(tile => tile.position === 0);
-  return blankTile.styles.order;
+  return blankTile[0].styles.order;
 }
 
 function getInvCount(tiles) {

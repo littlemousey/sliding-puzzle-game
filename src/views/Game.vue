@@ -31,6 +31,7 @@
 <script>
 import Tile from "@/components/Tile";
 import image from "@/assets/monks.jpg";
+import checkSolvability from "@/util/checkSolvability";
 
 export default {
   name: "Game",
@@ -73,7 +74,7 @@ export default {
       this.tileSize.width = Math.floor(img.width / this.size.horizontal);
       this.tileSize.height = Math.floor(img.height / this.size.vertical);
       this.generateTiles();
-      //this.shuffleTiles();
+      this.startGame(this.tiles);
     };
     img.src = this.image;
   },
@@ -96,9 +97,35 @@ export default {
         });
       }
     },
+    startGame(tiles) {
+      const shuffledTiles = this.shuffleTiles(tiles);
+      const gameIsSolvable = checkSolvability(shuffledTiles);
+      if (gameIsSolvable) {
+        return shuffledTiles;
+      } else {
+        this.shuffleTiles(tiles);
+      }
+    },
+    shuffleTiles(array) {
+      // Fisher-Yates shuffle
+      let currentIndex, temporaryValue, randomIndex;
 
-    shuffleTiles() {
-      // todo
+      currentIndex = array.length;
+      console.log(array.length);
+
+      // While there remain elements to shuffle
+      while (0 !== currentIndex) {
+        // Pick a remaining element
+        randomIndex = Math.floor(Math.random() * currentIndex);
+        currentIndex -= 1;
+
+        // And swap the style order with the current element
+        temporaryValue = array[currentIndex].styles.order;
+        array[currentIndex].styles.order = array[randomIndex].styles.order;
+        array[randomIndex].styles.order = temporaryValue;
+      }
+
+      return array;
     },
     moveTile(tile) {
       // Find the 4 direct (non-diagonal) neighbour tiles and see if any of them is the empty tile
