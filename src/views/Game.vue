@@ -77,7 +77,7 @@ export default {
       this.tileSize.width = Math.floor(img.width / this.size.horizontal);
       this.tileSize.height = Math.floor(img.height / this.size.vertical);
       this.generateTiles();
-      // this.startGame(this.tiles);
+      this.startGame(this.tiles);
     };
     img.src = this.image;
   },
