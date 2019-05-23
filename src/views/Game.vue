@@ -1,6 +1,9 @@
 <template>
   <div class="page">
-    <h1 class="bounce-in-top" v-if="solved">You solved the puzzle!</h1>
+    <div class="congratulations" v-if="solved">
+      <span v-for="n in 20" class="confetti" :key="n"></span>
+      <h1 class="bounce-in-top">You solved the puzzle!</h1>
+    </div>
     <h1 v-else>Solve the puzzle</h1>
     <div class="game">
       <div class="board nes-container is-rounded">
@@ -11,7 +14,7 @@
               v-for="tile in tiles"
               :key="tile.position"
               :tile="tile"
-              @move="moveTile(tile)"
+              v-on="{ move: !solved ? moveTile : null }"
               ref="tiles"
             />
           </div>
@@ -74,7 +77,7 @@ export default {
       this.tileSize.width = Math.floor(img.width / this.size.horizontal);
       this.tileSize.height = Math.floor(img.height / this.size.vertical);
       this.generateTiles();
-      this.startGame(this.tiles);
+      // this.startGame(this.tiles);
     };
     img.src = this.image;
   },
@@ -111,7 +114,6 @@ export default {
       let currentIndex, temporaryValue, randomIndex;
 
       currentIndex = array.length;
-      console.log(array.length);
 
       // While there remain elements to shuffle
       while (0 !== currentIndex) {
@@ -165,6 +167,8 @@ export default {
 </script>
 
 <style lang="scss">
+@import "../assets/styles/_animations.scss";
+
 .page {
   margin-top: 50px;
   text-align: center;
@@ -191,62 +195,5 @@ export default {
   display: flex;
   flex-wrap: wrap;
   background-size: cover;
-}
-
-.bounce-in-top {
-  animation: bounce-in-top 1.1s both;
-}
-
-@keyframes bounce-in-top {
-  0% {
-    -webkit-transform: translateY(-500px);
-    transform: translateY(-500px);
-    -webkit-animation-timing-function: ease-in;
-    animation-timing-function: ease-in;
-    opacity: 0;
-  }
-  38% {
-    -webkit-transform: translateY(0);
-    transform: translateY(0);
-    -webkit-animation-timing-function: ease-out;
-    animation-timing-function: ease-out;
-    opacity: 1;
-  }
-  55% {
-    -webkit-transform: translateY(-65px);
-    transform: translateY(-65px);
-    -webkit-animation-timing-function: ease-in;
-    animation-timing-function: ease-in;
-  }
-  72% {
-    -webkit-transform: translateY(0);
-    transform: translateY(0);
-    -webkit-animation-timing-function: ease-out;
-    animation-timing-function: ease-out;
-  }
-  81% {
-    -webkit-transform: translateY(-28px);
-    transform: translateY(-28px);
-    -webkit-animation-timing-function: ease-in;
-    animation-timing-function: ease-in;
-  }
-  90% {
-    -webkit-transform: translateY(0);
-    transform: translateY(0);
-    -webkit-animation-timing-function: ease-out;
-    animation-timing-function: ease-out;
-  }
-  95% {
-    -webkit-transform: translateY(-8px);
-    transform: translateY(-8px);
-    -webkit-animation-timing-function: ease-in;
-    animation-timing-function: ease-in;
-  }
-  100% {
-    -webkit-transform: translateY(0);
-    transform: translateY(0);
-    -webkit-animation-timing-function: ease-out;
-    animation-timing-function: ease-out;
-  }
 }
 </style>
