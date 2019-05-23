@@ -25,6 +25,7 @@
         <img :src="image" alt="original image" class="original-image" />
         <div>
           <p>Moves: {{ moves }}</p>
+          <p>Highscore: {{ highscore }}</p>
         </div>
       </div>
     </div>
@@ -51,7 +52,8 @@ export default {
         width: 0,
         height: 0
       },
-      moves: 0
+      moves: 0,
+      highscore: 10000
     };
   },
   computed: {
@@ -143,6 +145,7 @@ export default {
       if (target) {
         this.switchTiles(target, tile);
         this.moves++;
+        this.highscore -= 10;
       }
     },
 
