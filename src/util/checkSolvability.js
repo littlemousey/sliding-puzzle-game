@@ -2,21 +2,20 @@ export const GRID_COUNT = 4;
 
 export default function isSolvable(tiles) {
   const inversionCount = getInvCount(tiles);
-  if (GRID_COUNT % 2 === 1) {
-    return inversionCount % 2 === 0;
-  }
-
   const positionBlankTile = findXPosition(tiles);
-  const rowPositionBlankTile = Math.ceil(positionBlankTile / GRID_COUNT);
+  const rowPositionBlankTile = Math.floor(positionBlankTile / GRID_COUNT) + 1;
+  // check if the blank tile is on an even row counting from the bottom (therefore odd from the top)
+  // and number of inversions is odd
   if (rowPositionBlankTile % 2 == 1) {
     return inversionCount % 2 == 1;
   } else {
+    // blank tile is on an odd row counting from the bottom so number of inversions should be even
     return inversionCount % 2 == 0;
   }
 }
 
 function findXPosition(tiles) {
-  const blankTile = tiles.find(tile => tile.isEmpty);
+  const blankTile = tiles.find(tile => tile.position === 0);
   return blankTile.styles.order;
 }
 

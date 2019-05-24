@@ -43,6 +43,7 @@
 import Tile from "@/components/Tile";
 import image from "@/assets/monks.jpg";
 import checkSolvability, { GRID_COUNT } from "@/util/checkSolvability";
+import isPuzzleSolved from "@/util/isPuzzleSolved";
 
 export default {
   name: "Game",
@@ -69,15 +70,7 @@ export default {
     },
 
     solved() {
-      if (!this.tiles.length) {
-        return false;
-      }
-      for (let i = 0; i < this.totalTiles; ++i) {
-        if (this.tiles[i].styles.order !== this.tiles[i].position) {
-          return false;
-        }
-      }
-      return true;
+      return isPuzzleSolved(this.tiles, this.totalTiles);
     }
   },
   beforeMount() {
@@ -121,7 +114,10 @@ export default {
       }
 
       const shuffledTiles = this.shuffleTiles(tiles);
-      if (checkSolvability(shuffledTiles)) {
+      if (
+        checkSolvability(shuffledTiles) &&
+        !isPuzzleSolved(shuffledTiles, this.totalTiles)
+      ) {
         return shuffledTiles;
       }
 
