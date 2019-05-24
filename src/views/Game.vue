@@ -14,7 +14,7 @@
               v-for="tile in tiles"
               :key="tile.position"
               :tile="tile"
-              v-on="{ move: !solved ? moveTile : null }"
+              v-on="{ move: !solved ? moveTile : false }"
               ref="tiles"
             />
           </div>
@@ -26,6 +26,13 @@
         <div>
           <p>Moves: {{ moves }}</p>
           <p>Highscore: {{ highscore }}</p>
+          <button
+            v-if="solved"
+            class="nes-btn is-success"
+            @click="startGame(tiles)"
+          >
+            Play again
+          </button>
         </div>
       </div>
     </div>
@@ -35,7 +42,7 @@
 <script>
 import Tile from "@/components/Tile";
 import image from "@/assets/monks.jpg";
-import checkSolvability from "@/util/checkSolvability";
+import checkSolvability, { GRID_COUNT } from "@/util/checkSolvability";
 
 export default {
   name: "Game",
@@ -44,8 +51,8 @@ export default {
     return {
       image: image,
       size: {
-        horizontal: 4,
-        vertical: 4
+        horizontal: GRID_COUNT,
+        vertical: GRID_COUNT
       },
       tiles: [],
       tileSize: {
@@ -53,7 +60,7 @@ export default {
         height: 0
       },
       moves: 0,
-      highscore: 10000
+      highscore: 0
     };
   },
   computed: {
@@ -103,14 +110,24 @@ export default {
       }
     },
     startGame(tiles) {
-      const shuffledTiles = this.shuffleTiles(tiles);
-      const gameIsSolvable = checkSolvability(shuffledTiles);
-      if (gameIsSolvable) {
-        return shuffledTiles;
-      } else {
-        this.shuffleTiles(tiles);
-      }
+      this.highscore = 10000;
+      this.moves = 0;
+      this.tiles = this.getSolvableTiles(tiles);
     },
+
+    getSolvableTiles(tiles, tries = 0) {
+      if (tries === 30) {
+        return [];
+      }
+
+      const shuffledTiles = this.shuffleTiles(tiles);
+      if (checkSolvability(shuffledTiles)) {
+        return shuffledTiles;
+      }
+
+      return this.getSolvableTiles(tiles, tries + 1);
+    },
+
     shuffleTiles(array) {
       // Fisher-Yates shuffle
       let currentIndex, temporaryValue, randomIndex;
