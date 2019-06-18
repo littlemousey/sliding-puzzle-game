@@ -1,5 +1,7 @@
 # sliding-puzzle-game
 
+A demo of the repository can be found [here](https://zen-tereshkova-f8ce4f.netlify.com/)
+
 ## Project setup
 ```
 npm install
